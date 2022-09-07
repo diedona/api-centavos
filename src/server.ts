@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import { rotas } from './rotas';
 
 export class AplicacaoCentavos {
@@ -9,6 +9,7 @@ export class AplicacaoCentavos {
     this.servidor = express();
     this.configurarMiddlewares();
     this.configurarRotas();
+    this.configurarTratamentoDeErros();
   }
 
   private configurarMiddlewares() {
@@ -17,6 +18,15 @@ export class AplicacaoCentavos {
 
   private configurarRotas() {
     this.servidor.use(rotas);
+  }
+
+  private configurarTratamentoDeErros(): void {
+    this.servidor.use(this.tratamentoDeErros);
+  }
+
+  private tratamentoDeErros(err: Error, req: Request, res: Response, next: NextFunction) {
+    console.error(err);
+    res.status(500).send({ erro: 'Ocorreu um erro inesperado' });
   }
 
 }

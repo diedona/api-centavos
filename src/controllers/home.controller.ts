@@ -10,8 +10,24 @@ class HomeController {
     });
   }
 
-  mensagem(request: Request, response: Response) {
+  getMensagem(request: Request, response: Response) {
     return response.send(this.obterMensagemAleatoria());
+  }
+
+  async getMensagemAsync(request: Request, response: Response) {
+    console.log('iniciando');
+    await this.wait(5000);
+    return response.send(this.obterMensagemAleatoria());
+  }
+
+  private wait(milliseconds: number): Promise<void>{
+    return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
+    });
+  }
+
+  async getErro(req: Request, res: Response) {
+    throw new Error("Falha geral");
   }
 
   private obterMensagemAleatoria(): string {
